@@ -1,6 +1,5 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Question } from "../quiz/entities/question.entity";
-
+import { Question } from "./question.entity";
 
 @Entity('quizes')
 // this should be the name of the table

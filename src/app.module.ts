@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { typeOrmConfig } from './config/typeorm.config';
-import { QuestionService } from './module/services/question.service';
+import { QuestionService } from './module/quiz/services/question.service';
 import { QuizModule } from './module/quiz/quiz.module';
-import { QuizcontrollerController } from './module/controllers/quizcontroller.controller';
+import { QuizcontrollerController } from './module/quiz/controllers/quizcontroller.controller';
 import { UserModule } from './module/user/user.module';
 
 @Module({

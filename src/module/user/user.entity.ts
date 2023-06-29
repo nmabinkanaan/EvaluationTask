@@ -34,7 +34,8 @@ import * as bcrypt from 'bcrypt';
     async setPassword(password:string){
         const salt =await bcrypt.genSalt();
        //first i created the salt
-      const hash=await bcrypt.hash(password || this.password, salt);
+      this.password=await bcrypt.hash(password || this.password, salt);
+      
         //and this is the ecrypted version of the password 
        
         

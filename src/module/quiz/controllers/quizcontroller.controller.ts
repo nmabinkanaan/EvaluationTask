@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, Param, ParseIntPipe, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { Quiz } from '../quiz/entities/quiz.entity';
-import { CreateQuizDto } from '../quiz/dto/CreateQuiz.dto';
-import { QuizService } from '../quiz/services/quiz.service';
+import { Quiz } from '../entities/quiz.entity';
+import { CreateQuizDto } from '../dto/CreateQuiz.dto';
+import { QuizService } from '../services/quiz.service';
 
 @Controller('quizcontroller')
 export class QuizcontrollerController {

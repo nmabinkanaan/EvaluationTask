@@ -1,7 +1,7 @@
 import { Body, Get, Param, ParseIntPipe, Post, UsePipes, ValidationPipe } from "@nestjs/common";
 import { Controller } from "@nestjs/common";
 import { QuestionService } from "../services/question.service";
-import { CreateQuestionDto } from "../quiz/dto/create-question.dto";
+import { CreateQuestionDto } from "../dto/create-question.dto";
 import { Question } from "../entities/question.entity";
 import { QuizService } from "../services/quiz.service";
 
