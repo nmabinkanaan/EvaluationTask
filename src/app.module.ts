@@ -7,9 +7,10 @@ import { QuestionService } from './module/quiz/services/question.service';
 import { QuizModule } from './module/quiz/quiz.module';
 import { QuizcontrollerController } from './module/quiz/controllers/quizcontroller.controller';
 import { UserModule } from './module/user/user.module';
+import { AuthModule } from './module/auth/auth/auth.module';
 
 @Module({
-  imports: [QuizModule , TypeOrmModule.forRoot(typeOrmConfig), UserModule],
+  imports: [QuizModule , TypeOrmModule.forRoot(typeOrmConfig), UserModule,AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
