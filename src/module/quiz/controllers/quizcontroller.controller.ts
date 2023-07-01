@@ -2,7 +2,8 @@ import { Body, Controller, Get, HttpCode, Param, ParseIntPipe, Post, UsePipes, V
 import { Quiz } from '../entities/quiz.entity';
 import { CreateQuizDto } from '../dto/CreateQuiz.dto';
 import { QuizService } from '../services/quiz.service';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('quiz')
 @Controller('quizcontroller')
 export class QuizcontrollerController {
     constructor(private quizService: QuizService) {}
