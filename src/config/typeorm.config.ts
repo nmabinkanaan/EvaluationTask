@@ -12,5 +12,5 @@ export const typeOrmConfig: TypeOrmModuleOptions={
             __dirname + '/../**/*.entity{.ts,.js}',
         ],
         synchronize: true,
-        // in production we should make it false other ways we could lose data
+        // in production we should make it false otherwise we could lose data
 }

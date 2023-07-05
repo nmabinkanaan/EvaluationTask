@@ -1,6 +1,7 @@
 import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import * as bcrypt from 'bcrypt';
 import { ApiProperty } from "@nestjs/swagger";
+import { UserRoles } from "./enums/user.enum";
  
 @Entity({name:'users'})
  export class User extends BaseEntity{
@@ -32,6 +33,11 @@ import { ApiProperty } from "@nestjs/swagger";
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @ApiProperty({
+      description: 'user role',
+    })
+    @Column({type:'enum', enum:UserRoles,default:UserRoles.MEMBER})
+    role:UserRoles;
 
     //here i will put a decorator to encrypt the password before 
     //saving it in the database
