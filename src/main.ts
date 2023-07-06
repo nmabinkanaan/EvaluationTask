@@ -18,7 +18,8 @@ async function bootstrap() {
   // forceStylePath: true
   // access = 5prYLlqQ5XpLFMEHR1QW
   // secret = wtVyfOBT2d2Ctlmqz7ounlJHS2z7NUQbsWSe0HJx
-    
+    //7wFfhhngteAbTKF26Afh
+  //Wb3JMdi0Ps32GDPnhersIJKUHzuOAstSyLZyw1mv
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 

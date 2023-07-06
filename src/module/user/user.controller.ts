@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query, UseGuards, ValidationPipe, Request, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { AdminRoleGuard } from "../auth/auth/admin-role.guard";
 import { JwtAuthGuard } from "../auth/auth/jwt-auth.guard";
@@ -6,6 +6,9 @@ import { UserRegisterRequestDto } from "./dto/user-register-req.dto";
 import { FilterUserByNameDto } from "./dto/user-search.dto";
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
+import { Express } from 'express';
+import { FileInterceptor } from "@nestjs/platform-express";
+
 
 
 @ApiTags('user')
@@ -56,4 +59,38 @@ export class UserController {
 
         return await this.userService.doUserRegistration(userRegister);
     }
+
+    // @Post('/:id/upload-file')
+    // @UseInterceptors(FileInterceptor('file'))
+    // async addImageToUser(@UploadedFile() file: Express.Multer.File, @Param('id', new ParseUUIDPipe()) id: string,
+    //     @Request() req,) {
+    //     console.log(file);
+
+    // }
+    @Post('/:id/upload-file')
+    @UseInterceptors(FileInterceptor('file'))
+    async addImageToUser(
+        @Param('id', new ParseUUIDPipe()) id: number,
+        @UploadedFile() file: Express.Multer.File,
+        @Request() req,
+    ) {
+        console.log(file);
+     
+        //const { sub: email } = req.user;
+        //await this.userService.addFileToUser(file, id, email);
+        await this.userService.addFileToUser(file, id);
+    }
 }
+
+
+    // @UseInterceptors(FileInterceptor('file'))
+    // @Post('/:id/upload-file')
+    // async addImageToRecipe(
+    //   @UploadedFile() file: Express.Multer.File,
+    //   @Param('id', new ParseUUIDPipe()) id: string,
+    //   @Request() req,
+    // ) {
+    //   console.log(file);
+    // //   const { sub: email } = req.user;
+    // //   await this.recipeService.addFileTorecipe(file, id, email);
+    // }

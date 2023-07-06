@@ -2,11 +2,12 @@ import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, PrimaryColu
 import * as bcrypt from 'bcrypt';
 import { ApiProperty } from "@nestjs/swagger";
 import { UserRoles } from "./enums/user.enum";
+import { NumberCapability } from "aws-sdk/clients/pinpointsmsvoicev2";
  
 @Entity({name:'users'})
  export class User extends BaseEntity{
     @ApiProperty({ description: 'Primary key as User ID', example: 1 })
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id:number;
 
     @ApiProperty({ description: 'User name', example: 'Nouf Kanaan' })
@@ -55,4 +56,6 @@ import { UserRoles } from "./enums/user.enum";
        
         
     }
+    @Column({nullable:true})
+    image:string;
  }

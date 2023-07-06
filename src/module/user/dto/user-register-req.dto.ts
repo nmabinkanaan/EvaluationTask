@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, Length, Matches } from "class-validator";
+import { IsEmail, IsEmpty, IsNotEmpty, Length, Matches } from "class-validator";
 import { MESSAGES, REGEX } from "src/app.utils";
 
 export class UserRegisterRequestDto{
@@ -43,4 +43,8 @@ export class UserRegisterRequestDto{
     @IsNotEmpty()
     @Length(8,24)
     confirm:string;
+
+    @IsNotEmpty()
+    image:string;
+
 }

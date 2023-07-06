@@ -1,16 +1,20 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, HttpException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ILike, Repository } from "typeorm";
 import { UserRegisterRequestDto } from "./dto/user-register-req.dto";
 import { FilterUserByNameDto } from "./dto/user-search.dto";
 import { User } from "./user.entity";
+import { Express } from 'express';
+import { S3Service } from "src/s3/s3.service";
 
 
 
 
 @Injectable()
 export class UserService {
-    constructor(@InjectRepository(User) private quizRepository: Repository<User>) { }
+    constructor(@InjectRepository(User) private UserReposity: Repository<User>,
+                private s3Service:S3Service
+    ) { }
 
 
     async doUserRegistration(userRegister: UserRegisterRequestDto): Promise<User> {
@@ -35,13 +39,13 @@ export class UserService {
     }
 
     // async getAllUsers(): Promise<User[]> {
-    //     return await this.quizRepository
+    //     return await this.UserReposity
     //       .createQueryBuilder('q')
     //       .getMany();
     //   }
     async getAllUsers(search?: string): Promise<User[]> {
         try {
-            return await this.quizRepository
+            return await this.UserReposity
                 // .createQueryBuilder('q')
                 // .getMany();
                 .find({
@@ -61,4 +65,37 @@ export class UserService {
     async getUserById(id: number): Promise<User | undefined> {
         return User.findOne({ where: { id } });
     }
+
+    //async addFileToUser(file: Express.Multer.File, id: number=0, email: string) {
+        async addFileToUser(file: Express.Multer.File, id: number=0) {
+        const user = await this.UserReposity.findOne({ where: { id } });
+    
+           
+         
+        
+        //.findOne({ where: { id } });
+        // findOneOrFail(
+        //    {where: { 'id' }:}
+        //   relations: ['user'],
+        // }
+        // {
+
+            // where:{
+            //     id:id
+            // },
+            // relations:['user']
+          
+        
+    
+        // if (user.email !== email) {
+        //   throw new HttpException(
+        //     "rge",
+        //     400,
+        //   );
+        // }
+        const bucketKey = `${file.fieldname}${Date.now()}`;
+        const fileUrl = await this.s3Service.uploadFile(file, bucketKey);
+    
+        await this.UserReposity.update({ id }, { image: fileUrl });
+      }
 }
