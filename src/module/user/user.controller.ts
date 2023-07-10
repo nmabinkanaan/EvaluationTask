@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query, UseGuards, ValidationPipe, Request, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query, UseGuards, ValidationPipe, Request, UploadedFile, UseInterceptors, ParseFilePipe, FileTypeValidator } from "@nestjs/common";
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { AdminRoleGuard } from "../auth/auth/admin-role.guard";
 import { JwtAuthGuard } from "../auth/auth/jwt-auth.guard";
@@ -37,9 +37,9 @@ export class UserController {
         description: 'return user object as response',
         //type: User,
     })
-    @UseGuards(JwtAuthGuard, AdminRoleGuard)
+    //@UseGuards(JwtAuthGuard, AdminRoleGuard)
     @ApiBadRequestResponse({ description: 'User cannot search. Try again!' })
-    @ApiSecurity('jwt')
+    //@ApiSecurity('jwt')
     async getAllUsers(@Query() filterUserByName: FilterUserByNameDto): Promise<any> {
         //console.log(filterUserByName);
         if (Object.keys(filterUserByName).length)
@@ -71,7 +71,17 @@ export class UserController {
     @UseInterceptors(FileInterceptor('file'))
     async addImageToUser(
         @Param('id', new ParseUUIDPipe()) id: number,
-        @UploadedFile() file: Express.Multer.File,
+        @UploadedFile(
+            new ParseFilePipe({
+              validators: [
+                // new MaxFileSizeValidator({ maxSize: 1000 }),
+                 //new FileTypeValidator({ fileType: 'image/jpeg/PNG/jpg' }), fileType: /\.(jpg|jpeg|png)$/
+                // new FileTypeValidator({ fileType: /\.(jpg|jpeg|png)$/ }), fileType: '.(png|jpeg|jpg)'
+                new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+                //it didnt work before cuz of the format, its soppose to be regex in a string way
+              ],
+            }),
+            ) file: Express.Multer.File,
         @Request() req,
     ) {
         console.log(file);
