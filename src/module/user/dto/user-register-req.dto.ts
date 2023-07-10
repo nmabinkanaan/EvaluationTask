@@ -44,7 +44,7 @@ export class UserRegisterRequestDto{
     @Length(8,24)
     confirm:string;
 
-    @IsNotEmpty()
-    image:string;
+    // @IsNotEmpty()
+    // image:string;
 
 }

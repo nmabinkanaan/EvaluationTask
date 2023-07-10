@@ -27,22 +27,14 @@ export class UserService {
         return await user.save();
     }
     async getUserWithFilters(filterUserByName: FilterUserByNameDto) {
-        // const { search } = filterUserByName;
 
         //might as well just make it private not let
         return this.getAllUsers(filterUserByName.search);
         //we gonna store all task in this variable and then apply filtering
-        // if (search)
-        // users = (await users).filter(user =>
-        //     user.name.includes(search)
-        // )
+      
     }
 
-    // async getAllUsers(): Promise<User[]> {
-    //     return await this.UserReposity
-    //       .createQueryBuilder('q')
-    //       .getMany();
-    //   }
+ 
     async getAllUsers(search?: string): Promise<User[]> {
         try {
             return await this.UserReposity
@@ -66,33 +58,14 @@ export class UserService {
         return User.findOne({ where: { id } });
     }
 
-    //async addFileToUser(file: Express.Multer.File, id: number=0, email: string) {
+    
         async addFileToUser(file: Express.Multer.File, id: number=0) {
         const user = await this.UserReposity.findOne({ where: { id } });
     
            
          
         
-        //.findOne({ where: { id } });
-        // findOneOrFail(
-        //    {where: { 'id' }:}
-        //   relations: ['user'],
-        // }
-        // {
-
-            // where:{
-            //     id:id
-            // },
-            // relations:['user']
-          
-        
-    
-        // if (user.email !== email) {
-        //   throw new HttpException(
-        //     "rge",
-        //     400,
-        //   );
-        // }
+       
         const bucketKey = `${file.fieldname}${Date.now()}`;
         const fileUrl = await this.s3Service.uploadFile(file, bucketKey);
     

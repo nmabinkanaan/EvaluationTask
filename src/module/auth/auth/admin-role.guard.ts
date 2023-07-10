@@ -39,7 +39,6 @@ export class AdminRoleGuard implements CanActivate {
     }
 
     console.log(request.user);
-    console.log('hi2');
     //even though we know the user object is with the request
     //it is safest to ckeck and put question mark
     const { id } = request.user as User;;

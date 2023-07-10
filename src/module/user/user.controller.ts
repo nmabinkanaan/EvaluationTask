@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query, UseGuards, ValidationPipe, Request, UploadedFile, UseInterceptors, ParseFilePipe, FileTypeValidator } from "@nestjs/common";
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiSecurity, ApiTags } from "@nestjs/swagger";
+import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiCreatedResponse, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { AdminRoleGuard } from "../auth/auth/admin-role.guard";
 import { JwtAuthGuard } from "../auth/auth/jwt-auth.guard";
 import { UserRegisterRequestDto } from "./dto/user-register-req.dto";
@@ -23,13 +23,6 @@ export class UserController {
         description: 'return list of all users as response',
         type: User,
     })
-    // @Get('/')
-    // getAllQuiz(): any {
-    //     return this.userService.getAllUsers();
-    // }
-
-    //this end point will allow the admin to search based on specific name 
-    //and if the admin did not provide any name it will return all the users
     //localhost:3000/user?search=Nouf999
     //thisis an example of the endpoint
     @Get('/')
@@ -37,9 +30,9 @@ export class UserController {
         description: 'return user object as response',
         //type: User,
     })
-    //@UseGuards(JwtAuthGuard, AdminRoleGuard)
+    @UseGuards(JwtAuthGuard, AdminRoleGuard)
     @ApiBadRequestResponse({ description: 'User cannot search. Try again!' })
-    //@ApiSecurity('jwt')
+    @ApiSecurity('jwt')
     async getAllUsers(@Query() filterUserByName: FilterUserByNameDto): Promise<any> {
         //console.log(filterUserByName);
         if (Object.keys(filterUserByName).length)
@@ -60,47 +53,32 @@ export class UserController {
         return await this.userService.doUserRegistration(userRegister);
     }
 
-    // @Post('/:id/upload-file')
-    // @UseInterceptors(FileInterceptor('file'))
-    // async addImageToUser(@UploadedFile() file: Express.Multer.File, @Param('id', new ParseUUIDPipe()) id: string,
-    //     @Request() req,) {
-    //     console.log(file);
 
-    // }
+
+    @UseGuards(JwtAuthGuard)
+    @ApiBadRequestResponse({ description: 'you are not authorized to operate on this website, please try to login in order to be authinticated ' })
+    @ApiSecurity('jwt')
     @Post('/:id/upload-file')
     @UseInterceptors(FileInterceptor('file'))
     async addImageToUser(
         @Param('id', new ParseUUIDPipe()) id: number,
         @UploadedFile(
             new ParseFilePipe({
-              validators: [
-                // new MaxFileSizeValidator({ maxSize: 1000 }),
-                 //new FileTypeValidator({ fileType: 'image/jpeg/PNG/jpg' }), fileType: /\.(jpg|jpeg|png)$/
-                // new FileTypeValidator({ fileType: /\.(jpg|jpeg|png)$/ }), fileType: '.(png|jpeg|jpg)'
-                new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-                //it didnt work before cuz of the format, its soppose to be regex in a string way
-              ],
+                validators: [
+
+                    new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+
+                ],
             }),
-            ) file: Express.Multer.File,
+        ) file: Express.Multer.File,
         @Request() req,
     ) {
         console.log(file);
-     
-        //const { sub: email } = req.user;
-        //await this.userService.addFileToUser(file, id, email);
+
         await this.userService.addFileToUser(file, id);
     }
 }
 
 
-    // @UseInterceptors(FileInterceptor('file'))
-    // @Post('/:id/upload-file')
-    // async addImageToRecipe(
-    //   @UploadedFile() file: Express.Multer.File,
-    //   @Param('id', new ParseUUIDPipe()) id: string,
-    //   @Request() req,
-    // ) {
-    //   console.log(file);
-    // //   const { sub: email } = req.user;
-    // //   await this.recipeService.addFileTorecipe(file, id, email);
-    // }
+
+
